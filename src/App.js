@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import SearchBar from './searchBar';
+import api from './components/api'
+import ImageList from './ImageList';
 class App extends Component {
+state = {
+  image: []
+};
+ onSearchSubmit = async term =>{
+ const response = await api.get('/search/photos',{
+ params : { query : term}
+ });
+
+   
+console.log(response.data);
+ this.setState({ image : response.data.results })
+};
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+     <div>
+      <SearchBar onFormComp={this.onSearchSubmit} />      
+      <ImageList images ={this.state.image} />
+      
       </div>
     );
   }
